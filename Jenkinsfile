@@ -31,48 +31,48 @@ pipeline {
       }
     }
     
-    stage('parallel') {
-      parallel {
-        stage('test:unit') {
-          steps {
-            catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-              sh 'npm run test:unit -- --testPathIgnorePatterns src/components/__tests__/EditCooperationForm.spec.ts src/components/__tests__/AddHouseForm.spec.ts src/components/__tests__/AddApartmentForm.spec.ts src/views/__tests__/RegisterCooperation.spec.ts src/views/__tests__/CooperationInfo.spec.ts src/views/__tests__/CooperationPolls.spec.ts'
-            }
-          }
-        }
-        stage('test:coverage') {
-          steps {
-            catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-              sh 'npm run test:coverage'
-            }
-          }
-        }
-        stage('test:lint') {
-          steps {
-            catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-              sh 'npm run lint'
-            }
-          }
-        }
-      }
-    }
+//     stage('parallel') {
+//       parallel {
+//         stage('test:unit') {
+//           steps {
+//             catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+//               sh 'npm run test:unit -- --testPathIgnorePatterns src/components/__tests__/EditCooperationForm.spec.ts src/components/__tests__/AddHouseForm.spec.ts src/components/__tests__/AddApartmentForm.spec.ts src/views/__tests__/RegisterCooperation.spec.ts src/views/__tests__/CooperationInfo.spec.ts src/views/__tests__/CooperationPolls.spec.ts'
+//             }
+//           }
+//         }
+//         stage('test:coverage') {
+//           steps {
+//             catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+//               sh 'npm run test:coverage'
+//             }
+//           }
+//         }
+//         stage('test:lint') {
+//           steps {
+//             catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+//               sh 'npm run lint'
+//             }
+//           }
+//         }
+//       }
+//     }
     
-    stage('sonarqube') {
-      steps {
-        script {
-          def scannerHome = tool 'sonarqube';
-          withSonarQubeEnv('sonarqube') {
-            sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=home-ui -Dsonar.projectVersion=${packagejson.version} -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info"
-          }
-        }
-      }
-    }
+//     stage('sonarqube') {
+//       steps {
+//         script {
+//           def scannerHome = tool 'sonarqube';
+//           withSonarQubeEnv('sonarqube') {
+//             sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=home-ui -Dsonar.projectVersion=${packagejson.version} -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info"
+//           }
+//         }
+//       }
+//     }
     
-    stage("Quality gate") {
-      steps {
-        waitForQualityGate abortPipeline: false
-      }
-    }  
+//     stage("Quality gate") {
+//       steps {
+//         waitForQualityGate abortPipeline: false
+//       }
+//     }  
   
     stage('publish') { 
       steps {
