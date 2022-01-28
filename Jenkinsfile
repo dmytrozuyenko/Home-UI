@@ -36,7 +36,7 @@ pipeline {
         stage('test:unit') {
           steps {
             catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-              sh 'npm run test:unit -- --testPathIgnorePatterns src/components/__tests__/EditCooperationForm.spec.ts src/components/__tests__/AddHouseForm.spec.ts src/components/__tests__/AddApartmentForm.spec.ts src/views/__tests__/RegisterCooperation.spec.ts src/views/__tests__/CooperationInfo.spec.ts'
+              sh 'npm run test:unit -- --testPathIgnorePatterns src/components/__tests__/EditCooperationForm.spec.ts src/components/__tests__/AddHouseForm.spec.ts src/components/__tests__/AddApartmentForm.spec.ts src/views/__tests__/RegisterCooperation.spec.ts src/views/__tests__/CooperationInfo.spec.ts src/views/__tests__/CooperationPolls.spec.ts'
             }
           }
         }
