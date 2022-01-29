@@ -16,8 +16,8 @@ pipeline {
         
         withCredentials([usernamePassword(credentialsId: 'github-token-dmytrozuyenko', passwordVariable: 'github_token', usernameVariable: 'github_user')]) {
           sh 'git checkout develop'
-//           sh 'npm version patch -no-git-tag-version --force'
-          sh 'npm version patch'
+          sh 'npm version patch -no-git-tag-version --force'
+//           sh 'npm version patch'
           sh 'git add package.json'
           sh 'git commit -m "[ci skip]"'
           sh 'git push https://${github_token}@github.com/${github_user}/home-ui.git --force'
