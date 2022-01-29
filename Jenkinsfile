@@ -80,7 +80,7 @@ pipeline {
           sh 'echo \"registry=http://35.225.255.93:8081/repository/home-ui/\n_authToken=${nexus_token}" > .npmrc'
         }
         sh 'npm install -g npm-cli-login'
-        withCredentials([usernamePassword(credentialsId: 'nexus-admin', passwordVariable: 'nexus_pass', usernameVariable: 'nexus_user')]) {
+        withCredentials([usernamePassword(credentialsId: 'nexus-user', passwordVariable: 'nexus_pass', usernameVariable: 'nexus_user')]) {
           sh "npm-cli-login -r http://35.225.255.93:8081/repository/home-ui/ -u ${nexus_user} -p ${nexus_pass} -e dmytrozuyenko@gmail.com"
           sh "npm publish --registry http://35.225.255.93:8081/repository/home-ui/"
         }
