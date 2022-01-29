@@ -112,7 +112,12 @@ pipeline {
   //     withCredentials([sshUserPrivateKey(credentialsId: "aws-key", keyFileVariable: 'aws_key')]) {
   //       sh "scp -i ${aws_key} /var/lib/jenkins/userContent/home-ui.conf ubuntu@3.129.6.213:/home/ubuntu/home-ui/dist/"
   //   }
-
+    
+    stage ('Starting downstream job ') {
+      steps {
+        build job: 'home-ui_infra/main'
+      }
+    }
   }
   
   post {
