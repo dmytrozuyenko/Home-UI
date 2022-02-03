@@ -19,7 +19,7 @@ pipeline {
           sh 'npm version patch -no-git-tag-version --force'
 //           sh 'git add package.json'
 //           sh 'git commit -m "[ci skip]"'
-          sh 'git push https://${github_token}@github.com/${github_user}/home-ui.git --force'
+//           sh 'git push https://${github_token}@github.com/${github_user}/home-ui.git --force'
         }
         
         script {
