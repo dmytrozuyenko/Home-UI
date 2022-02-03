@@ -31,48 +31,48 @@ pipeline {
       }
     }
     
-//     stage('parallel') {
-//       parallel {
-//         stage('test:unit') {
-//           steps {
-//             catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-//               sh 'npm run test:unit -- --testPathIgnorePatterns src/components/__tests__/EditCooperationForm.spec.ts src/components/__tests__/AddHouseForm.spec.ts src/components/__tests__/AddApartmentForm.spec.ts src/views/__tests__/RegisterCooperation.spec.ts src/views/__tests__/CooperationInfo.spec.ts src/views/__tests__/CooperationPolls.spec.ts'
-//             }
-//           }
-//         }
-//         stage('test:coverage') {
-//           steps {
-//             catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-//               sh 'npm run test:coverage'
-//             }
-//           }
-//         }
-//         stage('test:lint') {
-//           steps {
-//             catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-//               sh 'npm run lint'
-//             }
-//           }
-//         }
-//       }
-//     }
+    stage('parallel') {
+      parallel {
+        stage('test:unit') {
+          steps {
+            catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+              sh 'npm run test:unit -- --testPathIgnorePatterns src/components/__tests__/EditCooperationForm.spec.ts src/components/__tests__/AddHouseForm.spec.ts src/components/__tests__/AddApartmentForm.spec.ts src/views/__tests__/RegisterCooperation.spec.ts src/views/__tests__/CooperationInfo.spec.ts src/views/__tests__/CooperationPolls.spec.ts'
+            }
+          }
+        }
+        stage('test:coverage') {
+          steps {
+            catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+              sh 'npm run test:coverage'
+            }
+          }
+        }
+        stage('test:lint') {
+          steps {
+            catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+              sh 'npm run lint'
+            }
+          }
+        }
+      }
+    }
     
-//     stage('sonarqube') {
-//       steps {
-//         script {
-//           def scannerHome = tool 'sonarqube';
-//           withSonarQubeEnv('sonarqube') {
-//             sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=home-ui -Dsonar.projectVersion=${packagejson.version} -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info"
-//           }
-//         }
-//       }
-//     }
+    stage('sonarqube') {
+      steps {
+        script {
+          def scannerHome = tool 'sonarqube';
+          withSonarQubeEnv('sonarqube') {
+            sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=home-ui -Dsonar.projectVersion=${packagejson.version} -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info"
+          }
+        }
+      }
+    }
     
-//     stage("Quality gate") {
-//       steps {
-//         waitForQualityGate abortPipeline: false
-//       }
-//     }  
+    stage("Quality gate") {
+      steps {
+        waitForQualityGate abortPipeline: false
+      }
+    }  
   
     stage('publish') { 
       steps {
@@ -94,30 +94,10 @@ pipeline {
           sh "tar zxvf /var/lib/jenkins/userContent/home-${packagejson.version}.tgz -C /var/lib/jenkins/userContent/home-latest"
         }
         build job: 'home-ui_infra/main'
-        
-//         sh "rm /var/lib/jenkins/userContent/home-${packagejson.version}.tgz"
-//         sh "rm -rf /var/lib/jenkins/userContent/home-latest"
+//        sh "rm /var/lib/jenkins/userContent/home-${packagejson.version}.tgz"
+//        sh "rm -rf /var/lib/jenkins/userContent/home-latest"
       }    
     }
-          
-          
-    //     withCredentials([usernamePassword(credentialsId: 'nexus-user', passwordVariable: 'nexus_pass', usernameVariable: 'nexus_user')]) {
-    //       sh "wget -O /var/lib/jenkins/userContent/home-${packagejson.version}.tgz --user ${nexus_user} --password ${nexus_pass} http://35.225.255.93:8081/repository/home-ui/home/-/home-${packagejson.version}.tgz"
-    //     }
-    //     withCredentials([sshUserPrivateKey(credentialsId: "aws-key", keyFileVariable: 'aws_key')]) {
-    //       sh "ssh -i ${aws_key} ubuntu@3.129.6.213 \"sudo systemctl stop nginx\""
-    //       sh "scp -i ${aws_key} /var/lib/jenkins/userContent/home-${packagejson.version}.tgz ubuntu@3.129.6.213:/home/ubuntu/home-ui/dist/"
-    //       sh "ssh -i ${aws_key} ubuntu@3.129.6.213 \"tar zxvf /home/ubuntu/home-ui/dist/home-${packagejson.version}.tgz -C /home/ubuntu/home-ui/dist\""
-    //       sh "ssh -i ${aws_key} ubuntu@3.129.6.213 \"sudo cp -R /home/ubuntu/home-ui/dist/package/dist/* /var/www/home-ui/\""
-    //       sh "ssh -i ${aws_key} ubuntu@3.129.6.213 \"rm -rf /home/ubuntu/home-ui/dist/package/\""
-    //       sh "ssh -i ${aws_key} ubuntu@3.129.6.213 \"rm /home/ubuntu/home-ui/dist/home-${packagejson.version}.tgz\""
-    //       sh "scp -i ${aws_key} /var/lib/jenkins/userContent/home-ui.conf ubuntu@3.129.6.213:/home/ubuntu/home-ui/nginx/"
-    //       sh "ssh -i ${aws_key} ubuntu@3.129.6.213 \"sudo cp -R /home/ubuntu/home-ui/nginx/* /etc/nginx/sites-enabled/\""
-    //       sh "ssh -i ${aws_key} ubuntu@3.129.6.213 \"sudo systemctl start nginx\""
-    //     }
-    //   }  
-    // }
-
   }
   
   post {
