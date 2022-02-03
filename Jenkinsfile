@@ -94,7 +94,6 @@ pipeline {
           sh "tar zxvf /var/lib/jenkins/userContent/home-${packagejson.version}.tgz -C /var/lib/jenkins/userContent/home-latest"
         }
         build job: 'home-ui_infra/main'
-//        sh "rm /var/lib/jenkins/userContent/home-${packagejson.version}.tgz"
 //        sh "rm -rf /var/lib/jenkins/userContent/home-latest"
       }    
     }
