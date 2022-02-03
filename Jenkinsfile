@@ -4,11 +4,11 @@ pipeline {
     nodejs "node"
   }
   stages {
-      stage('checkout') {
-        steps {
-          scmSkip(deleteBuild: true, skipPattern:'.*\\[ci skip\\].*')
-        }
-      }
+//       stage('checkout') {
+//         steps {
+//           scmSkip(deleteBuild: true, skipPattern:'.*\\[ci skip\\].*')
+//         }
+//       }
 
     stage('build') {
       steps {
@@ -17,8 +17,8 @@ pipeline {
         withCredentials([usernamePassword(credentialsId: 'github-token-dmytrozuyenko', passwordVariable: 'github_token', usernameVariable: 'github_user')]) {
           sh 'git checkout develop'
           sh 'npm version patch -no-git-tag-version --force'
-          sh 'git add package.json'
-          sh 'git commit -m "[ci skip]"'
+//           sh 'git add package.json'
+//           sh 'git commit -m "[ci skip]"'
           sh 'git push https://${github_token}@github.com/${github_user}/home-ui.git --force'
         }
         
