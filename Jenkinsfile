@@ -9,7 +9,6 @@ pipeline {
 //           scmSkip(deleteBuild: true, skipPattern:'.*\\[ci skip\\].*')
 //         }
 //       }
-
     stage('build') {
       steps {
         sh 'npm install'
