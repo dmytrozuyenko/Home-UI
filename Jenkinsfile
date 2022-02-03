@@ -88,8 +88,20 @@ pipeline {
       }
     }
 
-    // stage('deploy') {
-    //   steps {
+    stage('deploy') {
+      steps {
+        withCredentials([usernamePassword(credentialsId: 'nexus-user', passwordVariable: 'nexus_pass', usernameVariable: 'nexus_user')]) {
+          sh "wget -O /var/lib/jenkins/userContent/home-${packagejson.version}.tgz --user ${nexus_user} --password ${nexus_pass} http://35.225.255.93:8081/repository/home-ui/home/-/home-${packagejson.version}.tgz"
+          sh "tar zxvf /var/lib/jenkins/userContent/home-${packagejson.version}.tgz -C /var/lib/jenkins/userContent/home-latest"
+        }
+        build job: 'home-ui_infra/main'
+        
+//         sh "rm /var/lib/jenkins/userContent/home-${packagejson.version}.tgz"
+//         sh "rm -rf /var/lib/jenkins/userContent/home-latest"
+      }    
+    }
+          
+          
     //     withCredentials([usernamePassword(credentialsId: 'nexus-user', passwordVariable: 'nexus_pass', usernameVariable: 'nexus_user')]) {
     //       sh "wget -O /var/lib/jenkins/userContent/home-${packagejson.version}.tgz --user ${nexus_user} --password ${nexus_pass} http://35.225.255.93:8081/repository/home-ui/home/-/home-${packagejson.version}.tgz"
     //     }
@@ -107,18 +119,6 @@ pipeline {
     //   }  
     // }
 
-  //   stage ('terraform') {
-
-  //     // Copy home-ui.conf to created webserver
-  //     withCredentials([sshUserPrivateKey(credentialsId: "aws-key", keyFileVariable: 'aws_key')]) {
-  //       sh "scp -i ${aws_key} /var/lib/jenkins/userContent/home-ui.conf ubuntu@3.129.6.213:/home/ubuntu/home-ui/dist/"
-  //   }
-    
-    stage ('Starting downstream job ') {
-      steps {
-        build job: 'home-ui_infra/main'
-      }
-    }
   }
   
   post {
